@@ -69,12 +69,15 @@
     team_id_select.setAttribute("previousValue",null);
 
     socket.on('new teams', function (data) {
+        console.log(data);
         add_teams(data);
     });
     socket.on('new match', function(data) {
+        console.log(data);
         update_match_number(data);
     });
     socket.on('new error', function(data) {
+        console.log(data);
         alert(data["message"]);
     });
     socket.emit('get match');
