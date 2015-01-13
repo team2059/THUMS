@@ -19,6 +19,7 @@
   "dependencies": {
     "express": "^4.10.7",
     "hbs": "^2.8.0",
+    "socket.io": "^1.2.1",
     "2015-Scouting": "./apps/2015-Scouting"
   }
 }
