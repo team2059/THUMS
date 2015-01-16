@@ -43,34 +43,36 @@ function load_app(err,data){
     if (!err){
         data = JSON.parse(data);
         console.log(data["name"]);
-        child = exec("cd apps && cd "+data["name"]+" && npm install --save && cd .. && cd ..",function(error, stdout, stderr) { });
-        var new_mid = require( path.join(__dirname, "/apps/",data["name"]) );
-        if (data["type"].indexOf("database") >= 0) {
-            init_database(data);
-            new_mid.database(db);
-            if (data["posts"]) {
-                setTimeout(function() {
-                    console.log("Initializing content for "+data["name"]); 
-                    for (var i = 0; i < data["posts"].length; i++) {
-                        add_post(data["posts"][i]);
-                    }
-                },500)
-            }
-        }
-        if (data["type"].indexOf("sockets") >= 0) {
-            io.on('connection',new_mid.extendSockets);
-        }
-        if (data["type"].indexOf("script") >= 0) {
-            fs.readFile( path.join(__dirname,'/apps/',data["name"],'scripts.js') , function(err,script) {
-                for (var x = 0; x < data["path"].length; x++) {
-                    if (!serve_scripts[data["path"][x]]) {
-                        serve_scripts[data["path"][x]] = [];
-                    }
-                    serve_scripts[data["path"][x]].push(script.toString());
+        child = exec("cd apps && cd "+data["name"]+" && npm install --save && cd .. && cd ..",function(error, stdout, stderr) { 
+            var new_mid = require( path.join(__dirname, "/apps/",data["name"]) );
+            if (data["type"].indexOf("database") >= 0) {
+                init_database(data);
+                new_mid.database(db);
+                if (data["posts"]) {
+                    setTimeout(function() {
+                        console.log("Initializing content for "+data["name"]); 
+                        for (var i = 0; i < data["posts"].length; i++) {
+                            add_post(data["posts"][i]);
+                        }
+                    },500)
                 }
-            });
-        }
-        //app.use(data["path"],new_mid);
+            }
+            if (data["type"].indexOf("sockets") >= 0) {
+                io.on('connection',new_mid.extendSockets);
+            }
+            if (data["type"].indexOf("script") >= 0) {
+                fs.readFile( path.join(__dirname,'/apps/',data["name"],'scripts.js') , function(err,script) {
+                    for (var x = 0; x < data["path"].length; x++) {
+                        if (!serve_scripts[data["path"][x]]) {
+                            serve_scripts[data["path"][x]] = [];
+                        }
+                        serve_scripts[data["path"][x]].push(script.toString());
+                    }
+                });
+            }
+            //app.use(data["path"],new_mid);
+        });
+
     }
 
 
@@ -195,8 +197,10 @@ fs.readFile( path.join(__dirname,'config.json') , function(err,data){
     }
 });
 
-
-
-
-
-server.listen(80);
+try {
+    server.listen(80);
+    console.log("Server running on port 80");
+} catch(e) {
+    server.listen(3000);
+    console.log("Server running on port 3000");
+}
