@@ -9,11 +9,21 @@
         {{> header}}
         <div class="content">
             <article>
-                {{> match_input}}
+                {{#success}}
+                    <h1 id="page-title">{{title}}</h1>
+                    <noscript><h2>Please enable JavaScript to enable full features.</h2></noscript>
+                {{> modules}}
+                {{> posts}}
+                {{else}}
+                    {{> error}}
+                {{/success}}
             </article>
         </div>
     </div>
-</body>
 {{> scripts}}
+{{#each script}}
+    <script>{{{this}}}</script>
+{{/each}}
 {{> panel_script}}
+</body>
 </html>
