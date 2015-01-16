@@ -46,8 +46,8 @@ function load_app(err,data){
         child = exec("cd apps && cd "+data["name"]+" && npm install --save && cd .. && cd ..",function(error, stdout, stderr) { });
         var new_mid = require( path.join(__dirname, "/apps/",data["name"]) );
         if (data["type"].indexOf("database") >= 0) {
-            new_mid.database(db);
             init_database(data);
+            new_mid.database(db);
             if (data["posts"]) {
                 setTimeout(function() {
                     console.log("Initializing content for "+data["name"]); 
