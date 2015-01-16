@@ -1,85 +1,115 @@
-<script src="/socket.io/socket.io.js"></script>
-<script>
+<script id="thums">
+        
+    function appendToFunction(fn, callback,name) {
+        console.log(name);
+        window[fn] = (function(fn){
+            return function() {
+                fn();
+                callback();
+            }
+        }(window[fn]));
+    }
+    var on_reload = function () {};
 
-    var socket = io.connect(location.origin);
-
-    /* GLOBAL VARIABLES */
-
-    var current_match = 0,
-        //current_team = null,
-        //current_name = null,
-        name_input = document.getElementById('input-name'),
-        team_id_select = document.getElementById('robot-id');
-
-    /* UPDATE HANDLERS */
-
-    /* Update or populate match number. */
-
-    function update_match_number(num) {
-        for (var x = 0; x < document.getElementsByClassName('match-number').length; x++) {
-            current_match = num;
-            document.getElementsByClassName('match-number')[0].textContent = num.toString();
+    function new_title(title) {
+        document.getElementById('page-title').textContent = title;
+    }
+    function reset_modules() {
+        var sections = document.getElementsByTagName('section'),
+            destroy = sections.length;
+        for (var x = 0; x < destroy; x++) {
+            sections[0].parentElement.removeChild(sections[0]);
         }
     }
-
-    /* Update or populate team list. */
-
-    function add_teams(obj) {
-        if (team_id_select.options.length > 1) {
-            var team_list = [];
-            for (i in obj["team"]){
-                team_list.push(obj["team"][i]);
-            }
-            for (var x = 0; x < team_id_select.options.length - 1; x++) {
-                team_id_select.options[x + 1].text = team_list[x];
-            }
-        } else {
-            for (x in obj["team"]) {
-                var new_option = document.createElement('option');
-                new_option.value = x;
-                new_option.textContent = obj["team"][x];
-                team_id_select.appendChild(new_option);
+    function add_module(data) {
+        var module = document.createElement('section');
+        var m_header = document.createElement('h1');
+        m_header.innerHTML = data["title"];
+        module.appendChild(m_header);
+        var m_content_div = document.createElement('div');
+        m_content_div.innerHTML = data["content"];
+        m_content_div.className = "section-content";
+        module.appendChild(m_content_div);
+        document.getElementsByTagName('article')[0].appendChild(module);
+    }
+    function add_link(data) {
+        var module = document.createElement('section');
+        var m_header = document.createElement('h1');
+        m_header.innerHTML = '<a href="/'+data["slug"]+'">'+data["title"]+'</a>';
+        module.appendChild(m_header);
+        document.getElementsByTagName('article')[0].appendChild(module);
+    }
+    function load_from_json() {
+        var data = JSON.parse(this.responseText);
+        on_reload = function () {};
+        console.log(data);
+        new_title(data["title"]);
+        reset_modules();
+        for (var x = 0; x < data["modules"].length; x++) {
+            add_module(data["modules"][x]);
+        }
+        if (data["posts"]) {
+            for (var x = 0; x < data["posts"].length; x++) {
+                add_link(data["posts"][x]);
             }
         }
-        for (var x = 0; x < obj["open"].length; x++) {
-            if (obj["open"][x]) {
-                team_id_select.options[x + 1].disabled = false;
-            } else {
-                team_id_select.options[x + 1].disabled = true;
+        if (document.getElementsByTagName('script')) {
+            var destroy = document.getElementsByTagName('script').length,
+                current_destroy = 0;
+            for (var x = 0; x < destroy; x++) {
+                if (document.getElementsByTagName('script')[current_destroy].id.indexOf('thums') >= 0) {
+                    current_destroy += 1;
+                    continue;
+                }
+                document.getElementsByTagName('script')[current_destroy].parentElement.removeChild(document.getElementsByTagName('script')[current_destroy]);
             }
+        }
+        if (data["script"]) {
+            for (var x = 0; x < data["script"].length; x++) {
+                var temp = document.createElement('script');
+                temp.textContent = data["script"][x];
+                console.log(temp);
+                document.body.appendChild(temp);
+                /*var temp_scripts = temp.getElementsByTagName('script'),
+                    temp_len = temp_scripts.length;
+                console.log(temp_scripts);
+                console.log("LENGTH: "+temp_len)
+                for (var x = 0; x < temp_len; x++) {
+                    console.log(temp_scripts[x]);
+                    console.log(x);
+                    console.log("LENGTH: "+temp_len);
+                    document.body.appendChild(temp_scripts[x]);
+                }*/
+            }
+        }
+        /*var all_scripts = document.getElementsByTagName('script');
+        console.log(all_scripts);
+        for (var x = 0; x < all_scripts.length; x++) {
+            if (all_scripts[x].className !== "generated") {
+                console.log(x);
+                continue;
+            }
+            all_scripts[x].parentElement.removeChild(all_scripts[x]);
+            document.body.appendChild(all_scripts[x]);
+            console.log(all_scripts[x]);
+        }*/
+        history.pushState({},data["title"],"/"+data["slug"]);
+        on_reload();
+    }
+    function click_event(e) {
+        var e = window.e || e;
+        if (e.target.tagName !== "A") {
+            return;
+        }
+        if(e.target.href.indexOf(location.origin) >= 0) {
+            e.preventDefault();
+            var new_link = e.target.href.replace(location.origin,'');
+            console.log('/api/page'+new_link);
+            var request = new XMLHttpRequest();
+            request.onload = load_from_json;
+            request.open('get','/api/page'+new_link, true);
+            request.send();
         }
     }
-
-    /* On team selection change */
-
-    team_id_select.addEventListener('change', function(e) {
-        console.log(e.target.value);
-        if (name_input.value.length < 1) { // Prevents selecting a team without having a name.
-            alert("Please input a name.");
-            e.target.value = null;
-        } else {
-            socket.emit('new team', {'team':e.target.value, 'name':name_input.value, 'open':false})
-            if (team_id_select.getAttribute("previousValue") !== "null") { // Change old team slot to be
-                socket.emit('new team', {'team':team_id_select.getAttribute("previousValue"),"name":null, "open":true})
-            }
-            team_id_select.setAttribute("previousValue",e.target.value); // Update previous value in case of change.
-        }
-
-    });
-    team_id_select.setAttribute("previousValue",null);
-
-    socket.on('new teams', function (data) {
-        console.log(data);
-        add_teams(data);
-    });
-    socket.on('new match', function(data) {
-        console.log(data);
-        update_match_number(data);
-    });
-    socket.on('new error', function(data) {
-        console.log(data);
-        alert(data["message"]);
-    });
-    socket.emit('get match');
-    socket.emit('get teams');
+    document.addEventListener('click', click_event, false);
 </script>
