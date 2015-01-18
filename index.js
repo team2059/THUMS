@@ -8,35 +8,74 @@ var app = require('express')(), // Express framework for web applications http:/
     db = new sqlite3.Database('database.db'), // Create or connect to the database
     exec = require('child_process').exec,child; // Handle installing submodules
 
-var serve_scripts = { "all" : [] }
+var serve_scripts = { "all" : [] },
+    init = {"posts": [] }; // Used on server start
 
 app.set('view engine', 'hbs'); // Connect handlebars to Express
 hbs.registerPartials(__dirname+'/views/partials'); // Designate partials folder for handlebars
 
 function add_post(data) {
     console.log("Initializing content for /"+data["slug"]);
-    db.get("SELECT * FROM posts WHERE slug = $slug",{$slug : data["slug"]}, function(err,row) {
-        if(!err) {
-            if(!row) {
-                var stmt = db.prepare("INSERT INTO posts (slug,title) VALUES (?,?)");
-                stmt.run(data["slug"],data["title"], function(err) {
-                    var post_id = this["lastID"];
-                    for (var i = 0; i < data["modules"].length; i++) {
-                        db.run("INSERT INTO modules (type,title,content,ord) VALUES (?,?,?,?)",data["modules"][i]["type"],data["modules"][i]["title"],data["modules"][i]["content"],data["modules"][i]["ord"], function(err,row) {
-                            db.run("INSERT INTO post_modules (post,module) VALUES ($post,$module)",{$post: post_id, $module: this["lastID"]})
-                        })
-                    }
-                });
+    function check_post(slug,callback) {
+        db.get("SELECT * FROM posts WHERE slug = $slug",{$slug : slug}, function(err,row) {
+            if(!err) {
+                if(!row) {
+                    callback(row);
+                } else {
+                    callback(row);
+                }
+            }
+        })
+    }
+
+    function insert_modules(post_id) {
+        for (var i = 0; i < data["modules"].length; i++) {
+            db.run("INSERT INTO modules (type,title,content,ord) VALUES (?,?,?,?)",data["modules"][i]["type"],data["modules"][i]["title"],data["modules"][i]["content"],data["modules"][i]["ord"], function(err,row) {
+                db.run("INSERT INTO post_modules (post,module) VALUES ($post,$module)",{$post: post_id, $module: this["lastID"]})
+            })
+        }
+    }
+
+    function insert_post(data) {
+        var stmt = db.prepare("INSERT INTO posts (slug,title) VALUES (?,?)");
+        stmt.run(data["slug"],data["title"], function(err) {
+            insert_modules(this["lastID"])
+        });
+    }
+    check_post(data["slug"], function(row) {
+        if (!row) {
+            insert_post(data);
+        } else {
+            insert_modules(row.id);
+        }
+    })
+
+}
+
+function init_database(data,callback) {
+    var done = false;
+    for (var x = 0; x < data["database"]["tables"].length; x++) {
+        var new_query = "CREATE table IF NOT EXISTS "+data["database"]["tables"][x]["name"]+" ("+data["database"]["tables"][x]["columns"].join(',')+")";
+        db.run(new_query, function(err,row){
+            if (callback && !done) {
+                done = true;
+                callback()
+            }
+        });
+    }
+}
+
+function app_post_check(name,callback) {
+    db.get("SELECT * FROM apps WHERE name = $name",{$name : name}, function(err,row) {
+        if (!err) {
+            if(row) {
+                callback(false);
+            } else {
+                db.run("INSERT INTO apps (name) VALUES (?)",name);
+                callback(true);
             }
         }
     })
-}
-
-function init_database(data) {
-    for (var x = 0; x < data["database"]["tables"].length; x++) {
-        var new_query = "CREATE table IF NOT EXISTS "+data["database"]["tables"][x]["name"]+" ("+data["database"]["tables"][x]["columns"].join(',')+")";
-        db.run(new_query);
-    }
 }
 
 function load_app(err,data){
@@ -46,16 +85,18 @@ function load_app(err,data){
         child = exec("cd apps && cd "+data["name"]+" && npm install --save && cd .. && cd ..",function(error, stdout, stderr) { 
             var new_mid = require( path.join(__dirname, "/apps/",data["name"]) );
             if (data["type"].indexOf("database") >= 0) {
-                init_database(data);
-                new_mid.database(db);
-                if (data["posts"]) {
-                    setTimeout(function() {
-                        console.log("Initializing content for "+data["name"]); 
-                        for (var i = 0; i < data["posts"].length; i++) {
-                            add_post(data["posts"][i]);
-                        }
-                    },500)
-                }
+                init_database(data,function() {
+                    if (data["posts"]) {
+                        app_post_check(data["name"], function(open) {
+                            if(open) {
+                                for (var i = 0; i < data["posts"].length; i++) {
+                                    add_post(data["posts"][i]);
+                                }
+                            }
+                        })
+                    }
+                    new_mid.database(db)
+                });
             }
             if (data["type"].indexOf("sockets") >= 0) {
                 io.on('connection',new_mid.extendSockets);
@@ -182,18 +223,20 @@ fs.readFile( path.join(__dirname,'config.json') , function(err,data){
     if (!err) {
         data = JSON.parse(data);
         console.log("Creating database");
-        init_database(data);
-        fs.readdirSync( path.join(__dirname, "/apps/") ).forEach(function (file) {
-            fs.readFile( path.join(__dirname,'/apps/',file,'config.json') , load_app);
+        init_database(data, function() {
+            fs.readdirSync( path.join(__dirname, "/apps/") ).forEach(function (file) {
+                fs.readFile( path.join(__dirname,'/apps/',file,'config.json') , load_app);
+            });
+            if (data["posts"]) {
+                app_post_check("THUMS",function(open) {
+                    if(open) {
+                        for (var i = 0; i < data["posts"].length; i++) {
+                            add_post(data["posts"][i]);
+                        }
+                    }
+                })
+            }
         });
-        if (data["posts"]) {
-            setTimeout(function() {
-                console.log("Initializing content for THUMS");
-                for (var i = 0; i < data["posts"].length; i++) {
-                    add_post(data["posts"][i]);
-                }
-            },1000) //Temporary until piping is set up.
-        }
     }
 });
 
