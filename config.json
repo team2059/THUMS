@@ -23,6 +23,11 @@
            "content TEXT",
            "ord INTEGER"
        ]
+      },
+      { "name":"apps",
+       "columns": [
+           "name TEXT"
+       ]
       }
   ]
  },
@@ -39,5 +44,8 @@
         }
      ]
      }
- ]
+ ], 
+ "server" : {
+     "port" : 80
+ }
 }
