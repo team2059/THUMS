@@ -6,7 +6,9 @@ var app = require('express')(), // Express framework for web applications http:/
     io = require('socket.io')(server), // Socket.io real-time engine http://socket.io/
     sqlite3 = require('sqlite3').verbose(), // SQLite3 database https://github.com/mapbox/node-sqlite3
     db = new sqlite3.Database('database.db'), // Create or connect to the database
-    exec = require('child_process').exec,child; // Handle installing submodules
+    exec = require('child_process').exec,child, // Handle installing submodules
+    Showdown = require('showdown'),
+    converter = new Showdown.converter();
 
 var serve_scripts = { "all" : [] }
 
@@ -77,7 +79,10 @@ function load_app(err,data){
 
 
     function get_all_posts(req,res,next) {
-        if (req.post_info["slug"] !== "") {
+        if (!req.post_info) {
+            req.post_info = {};
+        }
+        if (req.post_info["slug"] && req.post_info["slug"] !== "") {
             next();
         } else {
             db.all("SELECT * FROM posts WHERE parent IS NULL", function(err,row) {
@@ -173,6 +178,12 @@ function load_app(err,data){
     app.all('/api/blog', get_all_posts,return_api);
     app.all('/api/page/*', get_post, get_all_posts, get_module_ids, get_modules,return_api);
     app.all('/blog', get_all_posts,render);
+    app.all('/admin/*/edit', get_post, get_module_ids, get_modules, function(req,res) {
+        res.render('admin',req.post_info);
+    });
+    app.all('/admin', get_all_posts, function(req,res) {
+        res.render('admin', req.post_info)
+    });
     app.use('/*', get_post, get_all_posts, get_module_ids, get_modules);
     app.get('/',render);
     app.get('/*',render);
