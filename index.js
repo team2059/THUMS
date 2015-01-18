@@ -8,8 +8,7 @@ var app = require('express')(), // Express framework for web applications http:/
     db = new sqlite3.Database('database.db'), // Create or connect to the database
     exec = require('child_process').exec,child; // Handle installing submodules
 
-var serve_scripts = { "all" : [] },
-    init = {"posts": [] }; // Used on server start
+var serve_scripts = { "all" : [] };
 
 app.set('view engine', 'hbs'); // Connect handlebars to Express
 hbs.registerPartials(__dirname+'/views/partials'); // Designate partials folder for handlebars
@@ -111,7 +110,6 @@ function load_app(err,data){
                     }
                 });
             }
-            //app.use(data["path"],new_mid);
         });
 
     }
@@ -237,13 +235,7 @@ fs.readFile( path.join(__dirname,'config.json') , function(err,data){
                 })
             }
         });
+        server.listen(data["server"]["port"]);
     }
 });
 
-try {
-    server.listen(80);
-    console.log("Server running on port 80");
-} catch(e) {
-    server.listen(3000);
-    console.log("Server running on port 3000");
-}
