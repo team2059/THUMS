@@ -1,3 +1,4 @@
+/*jslint node:true*/
 var app = require('express')(), // Express framework for web applications http://expressjs.com/
     hbs = require('hbs'), // Express wrapper for Handlebars https://github.com/donpark/hbs
     fs = require('fs'),
@@ -6,7 +7,7 @@ var app = require('express')(), // Express framework for web applications http:/
     io = require('socket.io')(server), // Socket.io real-time engine http://socket.io/
     sqlite3 = require('sqlite3').verbose(), // SQLite3 database https://github.com/mapbox/node-sqlite3
     db = new sqlite3.Database('database.db'), // Create or connect to the database
-    exec = require('child_process').exec,child; // Handle installing submodules
+    exec = require('child_process').exec, child; // Handle installing submodules
 
 var serve_scripts = { "all" : [] };
 
