@@ -8,7 +8,7 @@
                 "title TEXT",
                 "type TEXT",
                 "image TEXT",
-                "content TEXT",
+                "content TEXT"
             ]
             },
             { "name":"post_modules",
@@ -29,6 +29,13 @@
             { "name":"apps",
              "columns": [
                  "name TEXT"
+             ]
+            },
+            { "name":"users",
+             "columns": [
+                 "id INTEGER PRIMARY KEY AUTOINCREMENT",
+                 "username TEXT NOT NULL",
+                 "password TEXT NOT NULL"
              ]
             }
         ]
