@@ -1,0 +1,103 @@
+body {
+    background-color: #F7F7F7;
+}
+
+button {
+    font-size: 2em;
+}
+
+section {
+    background-color: #FFFFFF;
+    margin: 1.5em 0 1.5em 0;
+    box-shadow: 0 .2em .5em #888888;
+    display: inline-block;
+    width: 100%;
+    max-width: 25em;
+}
+
+h1 {
+    font-family: Eagle, Helvetica, sans-serif;
+    font-size:2em;
+}
+
+textarea {
+    width:100%;
+    height:4em;
+    font-size:1.5em;
+}
+
+.content {
+    width: 100%;
+    margin: 0 auto 0 auto;
+}
+
+.section-content {
+    width: 85%;
+    padding: 7.5% 7.5% 7.5% 7.5%;
+}
+
+section h1 {
+    max-width: 100%;
+    text-align: center;
+    margin: 0 auto 0 auto;
+    padding: 5% 0 5% 0;
+    display: block;
+    background: #588dca;
+    color: #fff;
+    z-index: -2;
+    text-decoration: none;
+}
+
+
+.panel {
+    width:100%;
+    margin: 0.5em 0 0.5em 0;
+}
+
+.panel input[type=number] {
+    margin:0 0 0 0;
+    text-align:center;
+    font-size:2em;
+    width:68%;
+    float: left;
+}
+
+.panel input[type=button] {
+    margin:0 0 0 0;
+    padding:0 0 0 0;
+    color:#FFF;
+    font-size:1.5em;
+    height: 1.8em;
+    width:15%;
+    border:none;
+    -webkit-appearence: none;
+}
+
+.panel input[type=button]:first-of-type {
+    background-color:#588dca;
+    float:left;
+}
+
+.panel input[type=button]:last-of-type {
+    background-color:#ff9800;
+}
+
+@media (max-width: 839px) {
+
+    .content {
+        max-width: 25em;
+    }
+
+}
+
+@media (min-width: 840px) {
+
+    .content {
+        max-width: 55em;
+    }
+
+    section:nth-of-type(even) {
+        float: right;
+    }
+
+}
