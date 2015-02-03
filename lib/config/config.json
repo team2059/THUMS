@@ -38,6 +38,13 @@
                  "username TEXT NOT NULL",
                  "password TEXT NOT NULL"
              ]
+            },
+            { "name":"sessions",
+             "columns": [
+                 "id INTEGER",
+                 "session TEXT NOT NULL UNIQUE",
+                 "ip TEXT NOT NULL"
+             ]
             }
         ]
     },
