@@ -1,5 +1,3 @@
-var server = require('./lib'),
-    config = require("./lib/config");
+var server = require('./lib');
 
-config();
-server();
+server.init();
