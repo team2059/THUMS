@@ -10,9 +10,11 @@
         <div class="content">
             <article>
                 {{#success}}
-                    <h1 id="page-title">{{title}}</h1>
-                    <noscript><h2>Please enable JavaScript to enable full features.</h2></noscript>
-                {{> modules}}
+                    {{#each modules}}
+                        <section id="{{ord}}" class="{{class}}">
+                            {{> modules}}
+                        </section>
+                    {{/each}}
                 {{> posts}}
                 {{else}}
                     {{> error}}

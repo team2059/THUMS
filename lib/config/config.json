@@ -1,68 +1,73 @@
-{ 
-    "database": {
-        "tables": [
-            { "name":"posts", "columns": [
-                "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                "slug TEXT",
-                "parent TEXT",
-                "title TEXT",
-                "type TEXT",
-                "image TEXT",
-                "content TEXT"
-            ]
-            },
-            { "name":"post_modules",
-             "columns": [
-                 "post INTEGER",
-                 "module INTEGER"
-             ]
-            },
-            { "name":"modules",
-             "columns": [
-                 "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                 "type TEXT",
-                 "title TEXT",
-                 "content TEXT",
-                 "ord INTEGER"
-             ]
-            },
-            { "name":"apps",
-             "columns": [
-                 "name TEXT"
-             ]
-            },
-            { "name":"users",
-             "columns": [
-                 "id INTEGER PRIMARY KEY AUTOINCREMENT",
-                 "email TEXT NOT NULL UNIQUE",
-                 "username TEXT NOT NULL",
-                 "password TEXT NOT NULL"
-             ]
-            },
-            { "name":"sessions",
-             "columns": [
-                 "id INTEGER",
-                 "session TEXT NOT NULL UNIQUE",
-                 "ip TEXT NOT NULL"
-             ]
-            }
+{
+  "database": {
+    "tables": [
+      { "name":"posts", "columns": [
+        "id INTEGER PRIMARY KEY AUTOINCREMENT",
+        "slug TEXT NOT NULL",
+        "parent TEXT",
+        "title TEXT",
+        "featured INTEGER"
+      ]
+      },
+      { "name":"post_modules",
+        "columns": [
+          "post INTEGER",
+          "module INTEGER"
         ]
-    },
-    "posts" : [
+      },
+      { "name":"modules",
+        "columns": [
+          "id INTEGER PRIMARY KEY AUTOINCREMENT",
+          "type TEXT",
+          "class TEXT",
+          "title TEXT",
+          "content TEXT",
+          "ord INTEGER"
+        ]
+      },
+      { "name":"layouts",
+        "columns": [
+          "name TEXT",
+          "class TEXT"
+        ]
+      },
+      { "name":"apps",
+        "columns": [
+          "name TEXT"
+        ]
+      },
+      { "name":"users",
+        "columns": [
+          "id INTEGER PRIMARY KEY AUTOINCREMENT",
+          "email TEXT NOT NULL UNIQUE",
+          "username TEXT NOT NULL",
+          "password TEXT NOT NULL"
+        ]
+      },
+      { "name":"sessions",
+        "columns": [
+          "id INTEGER",
+          "session TEXT NOT NULL UNIQUE",
+          "ip TEXT NOT NULL"
+        ]
+      }
+    ]
+  },
+  "posts" : [
+    {
+      "title" : "Welcome to THUMS",
+      "slug" : "",
+      "modules" : [
         {
-            "title" : "Welcome to THUMS",
-            "slug" : "",
-            "modules" : [
-                { 
-                    "type" : "html",
-                    "title" : "This is a module",
-                    "content" : "<p>You can put a lot of content in here</p>",
-                    "ord" : 1
-                }
-            ]
+          "type" : "html",
+          "title" : "This is a module",
+          "content" : "<p>You can put a lot of content in here</p>",
+          "ord" : 1
         }
-    ], 
-    "server" : {
-        "port" : 80
+      ]
     }
+  ],
+  "server" : {
+    "port" : 80
+  }
 }
