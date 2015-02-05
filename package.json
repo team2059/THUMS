@@ -21,6 +21,8 @@
   "dependencies": {
     "cookie": "^0.1.2",
     "express": "^4.10.7",
+    "handlebars": "^2.0.0",
+    "handlebars-precompiler": "^2.1.0",
     "hbs": "^2.8.0",
     "less": "^2.3.1",
     "ncp": "^1.0.1",
