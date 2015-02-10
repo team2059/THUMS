@@ -33,7 +33,8 @@
       },
       { "name":"apps",
         "columns": [
-          "name TEXT"
+          "name TEXT",
+          "path TEXT"
         ]
       },
       { "name":"users",
