@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/team2059/THUMS",
   "dependencies": {
+    "bluebird": "^2.9.8",
     "cookie": "^0.1.2",
     "express": "^4.10.7",
     "handlebars": "^2.0.0",
