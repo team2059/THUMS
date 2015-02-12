@@ -4,4 +4,4 @@ public/
 *.db
 .idea/
 content/apps/*
-!content/apps/THUMS-Admin
+!content/apps/README.md
