@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "node lib/config/index.js",
     "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node lib/config/index.js && node index.js"
   },
   "repository": {
     "type": "git",
