@@ -6,7 +6,7 @@
   "scripts": {
     "prestart": "node lib/config/index.js",
     "start": "node index.js",
-    "test": "node lib/config/index.js && node index.js"
+    "test": "node lib/config/index.js && node test.js"
   },
   "repository": {
     "type": "git",
