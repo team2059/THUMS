@@ -3,5 +3,6 @@ views/
 public/
 *.db
 .idea/
+output/
 content/apps/*
 !content/apps/THUMS-Admin
