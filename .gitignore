@@ -1,6 +1,7 @@
 node_modules/
 views/
-public/
+public/*
+!public/thums.js
 *.db
 .idea/
 content/apps/*
