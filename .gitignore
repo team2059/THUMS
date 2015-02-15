@@ -1,8 +1,9 @@
 node_modules/
 views/
-public/
+public/*
+!public/thums.js
 *.db
 .idea/
 output/
 content/apps/*
-!content/apps/THUMS-Admin
+!content/apps/README.md
