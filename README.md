@@ -16,6 +16,6 @@ THUMS is currently under development and has yet to be added to [npm](http://npm
 
 ### Start THUMS
 
-To start THUMS, run `npm start`
+To start THUMS, run `npm start` or `node index.js`.
 
-**Important: using `node index.js` will not work as all configuration is currently being done using an npm prestart script.**
+This will load any applications and start the server.
