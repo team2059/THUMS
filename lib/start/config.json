@@ -22,6 +22,7 @@
           "class TEXT",
           "title TEXT",
           "content TEXT",
+          "featured TEXT",
           "ord INTEGER"
         ]
       },
