@@ -1,7 +1,7 @@
 {{#html}}
     <h1>{{{title}}}</h1>
     <div class="section-content">
-            {{{content.body}}}
+            {{{content}}}
     </div>
 {{/html}}
 {{#script}}
@@ -11,7 +11,7 @@
 {{/script}}
 {{#video}}
     <div class="video">
-        <iframe src="https://www.youtube-nocookie.com/embed/{{content.featured}}?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/{{featured}}?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
     </div>
     <h1>{{{title}}}</h1>
     <div class="section-content">
@@ -19,9 +19,9 @@
     </div>
 {{/video}}
 {{#image}}
-    <img src="/content/images/{{content.featured}}">
+    <img src="/content/images/{{featured}}">
     <h1>{{{title}}}</h1>
     <div class="section-content">
-        {{{content.body}}}
+        {{{content}}}
     </div>
 {{/image}}
