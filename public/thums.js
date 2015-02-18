@@ -19,7 +19,8 @@ function reset_modules() {
 }
 function add_module(data) {
     var module = document.createElement('section');
-    module.innerHTML = Handlebars.partials[""](data);
+    module.className = data.class;
+    module.innerHTML = Handlebars.partials["modules"](data);
     document.getElementsByTagName('article')[0].appendChild(module);
 }
 // TODO: Use handlebars to render categories.

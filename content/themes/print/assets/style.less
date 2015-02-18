@@ -13,10 +13,6 @@ body {
     width: 100%;
 }
 
-.half {
-    max-width: 25em;
-}
-
 h1 {
     font-family: Eagle, Helvetica, sans-serif;
     font-size:2em;
@@ -59,16 +55,14 @@ section h1 {
     width:100%;
     margin: 0.5em 0 0.5em 0;
 
-    input {
-        -webkit-appearance: none;
-    }
-
-    input[type=number] {
+    input[type=number],
+    input[type=text] {
         margin:0 0 0 0;
         text-align:center;
         font-size:2em;
-        width:68%;
+        width:100%;
         float: left;
+        -webkit-appearance: none;
     }
 
     input[type=button] {
@@ -79,6 +73,7 @@ section h1 {
         height: 1.8em;
         width:15%;
         border:none;
+        -webkit-appearance: none;
     }
 
     input[type=button]:first-of-type {
@@ -89,6 +84,16 @@ section h1 {
     input[type=button]:last-of-type {
         background-color:@hh-orange;
     }
+
+    select {
+        font-size:1.5em;
+        height: 1.8em;
+        width: 100%;
+    }
+}
+
+.block {
+    display: block;
 }
 
 .video {
@@ -105,10 +110,27 @@ section h1 {
     }
 }
 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.half {
+    max-width: 25em;
+    width: 50%;
+}
+
 @media (max-width: 839px) {
 
     .content {
         max-width: 25em;
+    }
+
+    section.half {
+        width: 100%;
     }
 
 }
