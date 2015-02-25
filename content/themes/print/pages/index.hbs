@@ -5,13 +5,13 @@
     {{> style}}
 </head>
 <body>
+    {{> header}}
     <div class="wrapper">
-        {{> header}}
         <div class="content">
             <article>
                 {{#success}}
                     {{#each modules}}
-                        <section id="{{ord}}" class="{{class}}">
+                        <section id="{{id}}" class="{{class}}">
                             {{> modules}}
                         </section>
                     {{/each}}

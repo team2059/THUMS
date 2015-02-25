@@ -20,6 +20,7 @@ function reset_modules() {
 function add_module(data) {
     var module = document.createElement('section');
     module.className = data.class;
+    module.id = data.id;
     module.innerHTML = Handlebars.partials["modules"](data);
     document.getElementsByTagName('article')[0].appendChild(module);
 }
@@ -44,25 +45,7 @@ function loadPage(data){
             add_link(data["posts"][x]);
         }
     }
-    if (document.getElementsByTagName('script')) {
-        var destroy = document.getElementsByTagName('script').length,
-            current_destroy = 0;
-        for (var x = 0; x < destroy; x++) {
-            if (document.getElementsByTagName('script')[current_destroy].id.indexOf('thums') >= 0) {
-                current_destroy += 1;
-                continue;
-            }
-            document.getElementsByTagName('script')[current_destroy].parentElement.removeChild(document.getElementsByTagName('script')[current_destroy]);
-        }
-    }
-    if (data["script"]) {
-        for (var x = 0; x < data["script"].length; x++) {
-            var temp = document.createElement('script');
-            temp.textContent = data["script"][x];
-            console.log(temp);
-            document.body.appendChild(temp);
-        }
-    }
+
     history.pushState({}, data["title"], "/" + data["slug"]);
     cache["/"+data["slug"]] = data;
 }
@@ -93,6 +76,8 @@ function click_event(e) {
         e.preventDefault();
         return;
     }
+    return;
+    // TODO: get script loading working.
     if(e.target.href.indexOf(location.origin) >= 0) {
         e.preventDefault();
         var new_link = e.target.href.replace(location.origin,'');
@@ -102,7 +87,71 @@ function click_event(e) {
 }
 document.addEventListener('click', click_event, false);
 window.addEventListener("popstate", function(e) {
-    console.log("PATH",location.pathname)
-    console.log("LOCATION",location)
+    console.log("PATH",location.pathname);
+    console.log("LOCATION",location);
     createCall(location.pathname);
 });
+
+var addPrefixEvent = function (element, type, callback) {
+    'use strict';
+    var i;
+    for (i in type) {
+        if (!type.hasOwnProperty(i)) {
+            continue;
+        }
+        if (element.style[i] !== undefined) {
+            element.addEventListener(type[i], callback);
+        }
+    }
+};
+
+var newAlert = function (alert_text) {
+    'use strict';
+    console.log(alert_text);
+    var new_alert = document.createElement('div'),
+        exit = document.createElement('button'),
+        i,
+        new_element;
+    new_alert.classList.add('alert');
+    exit.textContent = 'x';
+    exit.classList.add('left');
+    exit.addEventListener('click', function(event) {
+        event.target.parentElement.parentElement.removeChild(event.target.parentElement);
+    });
+    new_alert.appendChild(exit);
+    if (typeof alert_text === 'string') {
+        new_element = document.createElement('span');
+        new_element.textContent = alert_text;
+        new_alert.appendChild(new_element);
+    } else if (typeof alert_text === 'object') {
+        for (i in alert_text) {
+            if (!alert_text.hasOwnProperty(i)) {
+                continue;
+            }
+            if (alert_text[i] instanceof HTMLElement) {
+                new_element = alert_text[i];
+            } else if (typeof alert_text[i] === 'string') {
+                new_element = document.createElement('span');
+                new_element.textContent = alert_text[i];
+            }
+            new_alert.appendChild(new_element);
+        }
+    }
+    if (document.getElementById('alerts')) {
+        addPrefixEvent(new_alert, {
+            'animation': 'animationend',
+            'OTAnimation': 'oAnimationEnd',
+            'MozAnimation': 'transitionend',
+            'WebkitAnimation': 'webkitAnimationEnd'
+        }, function (event) {
+            event.target.parentElement.removeChild(event.target);
+        });
+        if (document.getElementById('alerts').firstChild) {
+            document.getElementById('alerts').insertBefore(new_alert, document.getElementById('alerts').firstChild);
+        } else {
+            document.getElementById('alerts').appendChild(new_alert);
+        }
+    } else {
+        alert(new_alert.textContent);
+    }
+};
