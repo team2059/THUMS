@@ -25,3 +25,23 @@
         {{{content}}}
     </div>
 {{/image}}
+{{#table}}
+<table>
+    <tbody>
+        {{#each content}}
+        {{#if @first}}
+        <tr>
+            {{#each this}}
+            <th>{{@key}}</th>
+            {{/each}}
+        </tr>
+        {{/if}}
+        <tr>
+            {{#each this}}
+            <td>{{this}}</td>
+            {{/each}}
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{/table}}
