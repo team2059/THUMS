@@ -8,7 +8,7 @@ var server = require('../lib/');
 // Not using a ES6 pointer to play nicely with Mocha.
 describe('Start', function () {
     'use strict';
-    this.timeout(30000);
+    this.timeout(150000);
     it('should start without error.', (done) => {
         server.start(() => {
             done();
