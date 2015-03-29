@@ -1,0 +1,7 @@
+{
+  "preset"                : "crockford",
+  "esnext"                : true,
+  "validateQuoteMarks"    : "'",
+  "fileExtensions"        : [ ".js" ],
+  "excludeFiles"          : ["node_modules/**", ".jsx", "static/**"]
+}

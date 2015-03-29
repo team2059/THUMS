@@ -1,8 +1,3 @@
-"use strict";
-var server = require('./lib/');
-
-server.init(function () {
-    process.exit();
-});
-
-module.exports = server;
+require('babel/register'); // Compile to ES5.
+require('./tests'); // Unit tests.
+require('mocha-jshint')(); // Run linting.

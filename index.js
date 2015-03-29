@@ -1,7 +1,9 @@
-"use strict";
-var server = require('./lib');
+require('babel/register'); // Compile to ES5.
 
-server.init();
+var server = require('./lib'); // Main library.
 
-// In theory, this should allow THUMS to be used in other applications.
+server.start();
+
+// In theory, this should allow THUMS
+// to be used in other applications.
 module.exports = server;

@@ -1,0 +1,24 @@
+{
+  "name": "THUMS-Blog",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/team2059/THUMS.git"
+  },
+  "author": "Team 2059",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/team2059/THUMS/issues"
+  },
+  "homepage": "https://github.com/team2059/THUMS",
+  "dependencies": {
+  },
+  "thums": {
+    "permissions": [
+      "database",
+      "route"
+    ]
+  }
+}

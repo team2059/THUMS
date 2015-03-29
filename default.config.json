@@ -1,0 +1,14 @@
+{
+  "database": {
+    "client": "sqlite3",
+    "connection": {
+      "filename": "./database.db"
+    }
+  },
+  "theme": "print",
+  "apps": {
+    "THUMS-Blog": "file",
+    "THUMS-Admin": "file"
+  },
+  "port": 3000
+}

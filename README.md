@@ -1,7 +1,7 @@
 # THUMS
 **The Hitchhikers' Utility Management System**
 
-A modular framework for hosting web applications.
+A modular framework for running web applications.
 _ _ _
 
 ##Getting Started
