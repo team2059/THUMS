@@ -4,6 +4,7 @@ module.exports = (function () {
             id: 1,
             title: 'Login',
             type: 'login',
+            action: 'read',
             content: {
                 register: false,
                 login: true
@@ -13,6 +14,7 @@ module.exports = (function () {
             id: 1,
             title: 'Register',
             type: 'login',
+            action: 'read',
             content: {
                 register: true,
                 login: false
@@ -33,14 +35,35 @@ module.exports = (function () {
                                 reply(posts.map(function (post) {
                                     return {id: post.id,
                                         type: 'text',
+                                        action: 'link',
                                         title: post.title,
-                                        slug: '/admin/' + post.slug,
+                                        slug: '/admin/edit/' + post.slug,
                                         classname: 'module'
                                     };
                                 }));
                             })
                     } else {
                         reply(null);
+                    }
+                }
+            }, {
+                path: '/admin/edit/{page?}',
+                id: 'THUMS-Admin',
+                handler: function (request, reply) {
+                    if (!request.auth.isAuthenticated) {
+                        reply(login_section);
+                    }
+                    if (db) {
+                        db.loadPost(request.params.page || null)
+                            .then(function (post) {
+                                post.modules = post.modules.map(function (module) {
+                                    module.action = 'edit';
+                                    return module;
+                                });
+                                reply(post.modules);
+                            });
+                    } else {
+                        reply([]);
                     }
                 }
             }, {

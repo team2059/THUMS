@@ -12,6 +12,7 @@ module.exports = (function () {
                             reply(posts.map(function (post) {
                                 return {id: post.id,
                                     type: 'text',
+                                    action: 'link',
                                     title: post.title,
                                     slug: post.slug,
                                     classname: 'module'
