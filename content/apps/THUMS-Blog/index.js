@@ -11,9 +11,10 @@ module.exports = (function () {
                         .then(function (posts) {
                             reply(posts.map(function (post) {
                                 return {id: post.id,
-                                    type: 'postlink',
+                                    type: 'text',
                                     title: post.title,
-                                    slug: post.slug
+                                    slug: post.slug,
+                                    classname: 'module'
                                 };
                             }));
                         })

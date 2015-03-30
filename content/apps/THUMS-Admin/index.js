@@ -32,9 +32,10 @@ module.exports = (function () {
                             .then(function (posts) {
                                 reply(posts.map(function (post) {
                                     return {id: post.id,
-                                        type: 'postlink',
+                                        type: 'text',
                                         title: post.title,
-                                        slug: post.slug
+                                        slug: '/admin/' + post.slug,
+                                        classname: 'module'
                                     };
                                 }));
                             })
@@ -71,7 +72,7 @@ module.exports = (function () {
                                             request.payload.username,
                                             request.payload.password)
                                             .then(function () {
-                                                reply([]);
+                                                reply(login_section);
                                             })
                                     } else {
                                         return reply(login_section);
