@@ -1,4 +1,5 @@
-var React = require('react');
+var React = require('react'),
+    markdown = require('marked');
 
 module.exports = {
     read: React.createClass({displayName: 'Text',
@@ -19,8 +20,12 @@ module.exports = {
                     className: this.props.data.classname
                 },
                 React.createElement('h1', null, this.props.data.title),
-                React.createElement('p', {className: 'section-content'},
-                    this.props.data.content.self
+                React.createElement('div', {
+                        className: 'section-content',
+                        dangerouslySetInnerHTML: {
+                            __html: this.props.data.content.self
+                        }
+                    }
                 )
             );
         }
@@ -47,7 +52,8 @@ module.exports = {
             if (event.target.id === 'section-title') {
                 new_state.title  = event.target.value;
             } else if (event.target.id === 'section-text') {
-                new_state.content.self = event.target.value;
+                new_state.content.source = event.target.value;
+                new_state.content.self = markdown(event.target.value);
             }
             this.setState(new_state);
             this.props.onhandleChange(new_state);
@@ -67,7 +73,7 @@ module.exports = {
                             className: 'section-content',
                             id: 'section-text',
                             onChange: this.handleChange,
-                            value: this.state.content.self
+                            value: this.state.content.source
                         }
                     )
                 ), React.createElement('section', {
@@ -75,8 +81,12 @@ module.exports = {
                     },
                      React.createElement('div', null,
                         React.createElement('h1', {}, this.state.title),
-                        React.createElement('p', {className: 'section-content'},
-                            this.props.data.content.self
+                        React.createElement('div', {
+                                className: 'section-content',
+                                dangerouslySetInnerHTML: {
+                                    __html: this.props.data.content.self
+                                }
+                            }
                         )
                     )
                 )

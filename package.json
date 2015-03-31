@@ -28,6 +28,7 @@
     "hapi-auth-cookie": "^2.0.0",
     "knex": "^0.7.6",
     "less": "^2.4.0",
+    "marked": "^0.3.3",
     "minifyify": "^6.3.2",
     "npm": "^2.7.3",
     "react": "^0.13.1",
