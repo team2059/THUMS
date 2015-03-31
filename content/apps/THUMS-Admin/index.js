@@ -53,16 +53,32 @@ module.exports = (function () {
                     if (!request.auth.isAuthenticated) {
                         reply(login_section);
                     }
-                    if (db) {
-                        db.loadPost(request.params.page || null)
-                            .then(function (post) {
-                                post.modules = post.modules.map(function (module) {
-                                    module.action = 'edit';
-                                    return module;
+                    if (request.method === 'get') {
+                        if (db) {
+                            db.loadPost(request.params.page || null)
+                                .then(function (post) {
+                                    post.modules = post.modules.map(function (module) {
+                                        module.action = 'edit';
+                                        return module;
+                                    });
+                                    reply(post.modules);
                                 });
-                                reply(post.modules);
-                            });
-                    } else {
+                        } else {
+                            reply([]);
+                        }
+                    }
+                    if (request.method === 'post') {
+                        if (request.payload.modules) {
+                            request.payload.modules.forEach(function (module) {
+                                var new_module = {};
+                                new_module.id = module.id;
+                                new_module.type = module.type;
+                                new_module.title = module.title;
+                                new_module.classname = module.classname;
+                                new_module.content = module.content;
+                                db.addModule(new_module);
+                            })
+                        }
                         reply([]);
                     }
                 }
