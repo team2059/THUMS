@@ -26,6 +26,7 @@ module.exports = (function () {
                 path: '/admin/{page?}',
                 id: 'THUMS-Admin',
                 handler: function (request, reply) {
+                    var new_post;
                     if (!request.auth.isAuthenticated) {
                         reply(login_section);
                     }
@@ -33,13 +34,11 @@ module.exports = (function () {
                         db.getPostsByCategory('blog')
                             .then(function (posts) {
                                 reply(posts.map(function (post) {
-                                    return {id: post.id,
-                                        type: 'text',
-                                        action: 'link',
-                                        title: post.title,
-                                        slug: '/admin/edit/' + post.slug,
-                                        classname: 'module'
-                                    };
+                                    new_post = post.modules[0];
+                                    new_post.id = post.id;
+                                    new_post.action = 'link';
+                                    new_post.slug = '/admin/edit/' + post.slug;
+                                    return new_post;
                                 }));
                             })
                     } else {
