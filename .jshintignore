@@ -2,3 +2,4 @@ node_modules
 content
 static
 *.jsx
+coverage
