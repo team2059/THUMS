@@ -38,7 +38,6 @@
     "minifyify": "^6.3.2",
     "npm": "^2.7.3",
     "react": "^0.13.1",
-    "reactify": "^1.1.0",
     "sqlite3": "^3.0.5",
     "uglifyify": "^3.0.1"
   },
